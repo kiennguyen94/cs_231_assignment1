@@ -208,7 +208,7 @@ def batchnorm_forward(x, gamma, beta, bn_param):
     # Store the updated running means back into bn_param
     bn_param['running_mean'] = running_mean
     bn_param['running_var'] = running_var
-    cache = (x, running_mean, running_var, x_hat, out, gamma, beta, eps)
+    cache = (x, x_mean, x_var, x_hat, out, gamma, beta, eps)
     return out, cache
 
 
@@ -280,12 +280,50 @@ def batchnorm_backward_alt(dout, cache):
     # should be able to compute gradients with respect to the inputs in a       #
     # single statement; our implementation fits on a single 80-character line.  #
     ##########################################################################
-    pass
-    ##########################################################################
-    #                             END OF YOUR CODE                              #
-    ##########################################################################
-
-    return dx, dgamma, dbeta
+    # pass
+    # xhat, gamma, xmu, ivar, sqrtvar, var, eps = cache
+    #
+    # # get the dimensions of the input/output
+    # N, D = dout.shape
+    #
+    # # step9
+    # dbeta = np.sum(dout, axis=0)
+    # dgammax = dout  # not necessary, but more understandable
+    #
+    # # step8
+    # dgamma = np.sum(dgammax * xhat, axis=0)
+    # dxhat = dgammax * gamma
+    #
+    # # step7
+    # divar = np.sum(dxhat * xmu, axis=0)
+    # dxmu1 = dxhat * ivar
+    #
+    # # step6
+    # dsqrtvar = -1. / (sqrtvar**2) * divar
+    #
+    # # step5
+    # dvar = 0.5 * 1. / np.sqrt(var + eps) * dsqrtvar
+    #
+    # # step4
+    # dsq = 1. / N * np.ones((N, D)) * dvar
+    #
+    # # step3
+    # dxmu2 = 2 * xmu * dsq
+    #
+    # # step2
+    # dx1 = (dxmu1 + dxmu2)
+    # dmu = -1 * np.sum(dxmu1 + dxmu2, axis=0)
+    #
+    # # step1
+    # dx2 = 1. / N * np.ones((N, D)) * dmu
+    #
+    # # step0
+    # dx = dx1 + dx2
+    # ##########################################################################
+    # #                             END OF YOUR CODE                              #
+    # ##########################################################################
+    #
+    # return dx, dgamma, dbeta
 
 
 def dropout_forward(x, dropout_param):
